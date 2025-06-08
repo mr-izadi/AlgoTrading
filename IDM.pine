@@ -1,0 +1,38 @@
+//@version=5
+indicator("IDM Detector", overlay=true)
+
+// Input parameters 
+pivot_length = input.int(5, "Pivot Lookback Length", minval=1)
+reversal_candles = input.int(2, "Reversal Candles", minval=1)
+
+// Identify pivot highs and lows
+pivot_high = ta.pivothigh(high, pivot_length, pivot_length)
+pivot_low = ta.pivotlow(low, pivot_length, pivot_length)
+
+// Store pivot levels
+var float last_high = na
+var float last_low = na
+if not na(pivot_high)
+    last_high := pivot_high
+if not na(pivot_low)
+    last_low := pivot_low
+
+// Detect false breakout (IDM)
+var bool is_crossover = na
+var bool is_crossunder = na
+is_crossover := ta.crossover(high, last_high)
+is_crossunder := ta.crossunder(low, last_low)
+
+// Detect false breakout (IDM)
+bullish_idm = close > last_high and is_crossover and close[reversal_candles] < last_high
+bearish_idm = close < last_low and is_crossunder and close[reversal_candles] > last_low
+
+// Plot IDM signals
+if bullish_idm
+    label.new(bar_index, high, "Bullish IDM", color=color.red, style=label.style_label_down, textcolor=color.white)
+if bearish_idm
+    label.new(bar_index, low, "Bearish IDM", color=color.green, style=label.style_label_up, textcolor=color.white)
+
+// Plot pivot levels using plot.style_circles instead of plot.style_cross
+plot(last_high, "Last Pivot High", color=color.blue, style=plot.style_circles, offset=-pivot_length)
+plot(last_low, "Last Pivot Low", color=color.orange, style=plot.style_circles, offset=-pivot_length)
