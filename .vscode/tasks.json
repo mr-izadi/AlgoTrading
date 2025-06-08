@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "gdb",
+      "request": "attach",
+      "name": "Attach to MetaTrader",
+      "executable": "C:/Users/moham/AppData/Roaming/MetaQuotes/Terminal/251F5F8530531DF268B026245F764063/MQL4",  
+      "target": "terminal64.exe",
+      "cwd": "${workspaceRoot}"
+    }
+  ]
+}
