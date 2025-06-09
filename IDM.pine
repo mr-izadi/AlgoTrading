@@ -1,19 +1,29 @@
 //@version=5
 indicator("IDM Detector", overlay=true)
 
-// Input parameters 
-lookback = input.int(1, "Lookback Period", minval=1)
-
-// Detect IDM patterns
 bullish_idm = low < low[1] and close > math.max(open[1], close[1])
 bearish_idm = high > high[1] and close < math.min(open[1], close[1])
 
-// Plot IDM signals
-if bullish_idm
-    label.new(bar_index, low, "Bullish IDM", color=color.green, style=label.style_label_up, textcolor=color.white)
-if bearish_idm
-    label.new(bar_index, high, "Bearish IDM", color=color.red, style=label.style_label_down, textcolor=color.white)
+var float idm_price = na
+var int idm_bar = na
 
-// // Plot previous candle's body levels for reference
-// plot(high[1], "Previous High", color=color.blue, style=plot.style_circles)
-// plot(low[1], "Previous Low", color=color.orange, style=plot.style_circles)
+if bearish_idm
+    idm_price := high
+    idm_bar := bar_index
+if bullish_idm
+    idm_price := low
+    idm_bar := bar_index
+// پیدا کردن اولین برخورد قیمت با idm_price بعد از سیگنال و رسم خط بدون حذف خطوط قبلی
+if not na(idm_price) and bearish_idm
+    if high >= idm_price or low <= idm_price
+        line.new(idm_bar, idm_price, bar_index, idm_price, color=color.red, width=1)
+        // متغیرها ریست نمی‌شوند تا خطوط قبلی باقی بمانند
+if not na(idm_price) and bullish_idm
+    if high >= idm_price or low <= idm_price
+        line.new(idm_bar, idm_price, bar_index, idm_price, color=color.green, width=1)
+        // متغیرها ریست نمی‌شوند تا خطوط قبلی باقی بمانند
+
+if bullish_idm
+    label.new(bar_index, low, "X", color=color.green, style=label.style_label_up, textcolor=color.white)
+if bearish_idm
+    label.new(bar_index, high, "X", color=color.red, style=label.style_label_down, textcolor=color.white)
