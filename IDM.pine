@@ -13,17 +13,17 @@ if bearish_idm
 if bullish_idm
     idm_price := low
     idm_bar := bar_index
-// پیدا کردن اولین برخورد قیمت با idm_price بعد از سیگنال و رسم خط بدون حذف خطوط قبلی
+
 if not na(idm_price) and bearish_idm
     if high >= idm_price or low <= idm_price
         line.new(idm_bar, idm_price, bar_index, idm_price, color=color.red, width=1)
-        // متغیرها ریست نمی‌شوند تا خطوط قبلی باقی بمانند
+
 if not na(idm_price) and bullish_idm
     if high >= idm_price or low <= idm_price
         line.new(idm_bar, idm_price, bar_index, idm_price, color=color.green, width=1)
-        // متغیرها ریست نمی‌شوند تا خطوط قبلی باقی بمانند
+
 
 if bullish_idm
-    label.new(bar_index, low, "X", color=color.green, style=label.style_label_up, textcolor=color.white)
+    label.new(bar_index, low, "X", color=color.green, style= label.style_label_up, textcolor=color.white)
 if bearish_idm
     label.new(bar_index, high, "X", color=color.red, style=label.style_label_down, textcolor=color.white)
